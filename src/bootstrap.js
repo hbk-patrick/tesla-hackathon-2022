@@ -1,10 +1,15 @@
-import { CHECKOUT_APP_TARGET, displayCheckout } from './dom-utils';
+import {
+  CHECKOUT_MODAL_CONTAINER,
+  CHECKOUT_APP_TARGET_SELECTOR,
+  DISMISS_CHECKOUT_BUTTON_SELECTOR,
+  displayCheckout,
+} from './dom-utils';
 
-async function bootstrapESDK({targetId}) {
+async function bootstrapESDK({targetSelector}) {
   // Add script loader to page
   const {default: appFactory } = await System.import('@ecom/checkout/mock')
   const app = appFactory(
-    `#${targetId}`,
+    targetSelector,
     {
       workflow: 'shipping',
       cartToken: 'abc123',
@@ -14,32 +19,35 @@ async function bootstrapESDK({targetId}) {
 }
 
 function bootstrapGoToPaymentButton() {
-  document.querySelector('.continue-to-payment-btn').addEventListener(
-    'click',
-    (event) => {
-      event.preventDefault();
-      alert('clicked')
-    })
-  }
-
-function showElement(element) {
-  const { class: classNames } = element
-
-  classNames.split(' ')
+  debugger;
+  const goToCheckoutButton = document.querySelector('.continue-to-payment-btn')
+  debugger;
+  goToCheckoutButton.addEventListener('click', (event) => {
+    // TODO update route to #overview OR somehow remove base event listener
+    event.preventDefault();
+    displayCheckout(true);
+  })
 }
 
-function hideElement() {
-
-}
 
 function bootstrapItemSelection() {
 
 }
 
-function main() {
+function bootstrapExitModal() {
+  const dimissCheckoutButton = document.querySelector(DISMISS_CHECKOUT_BUTTON_SELECTOR);
 
-  bootstrapESDK({targetId: CHECKOUT_APP_TARGET});
+  dimissCheckoutButton.addEventListener('click', () => {
+    displayCheckout(false);
+  })
+}
 
+async function main() {
+  await bootstrapESDK({targetSelector: CHECKOUT_APP_TARGET_SELECTOR});
+
+  bootstrapExitModal();
+
+  bootstrapGoToPaymentButton();
 }
 
 main();
