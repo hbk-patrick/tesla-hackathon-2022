@@ -1,13 +1,24 @@
-#checkout-modal {
+#checkout-modal-container {
   position: absolute;
   top: 0;
   left: 0;
-  background-color: blue;
-  z-index: 1000;
+  z-index: 0;
   height: 100vh;
   width: 100vw;
+  overflow: hidden;
 };
 
-.hidden {
-  visibility: none;
+.overlay {
+  z-index: 1000;
+}
+
+.show-slider {
+  top: 0;
+}
+
+#slider-container {
+  top: 100%;
+  position: relative;
+  transition: all .3s ease-out;
+  height: 100%;
 }

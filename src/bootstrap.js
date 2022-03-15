@@ -1,15 +1,16 @@
-async function bootstrapESDK({checkoutElement}) {
+import { CHECKOUT_APP_TARGET, displayCheckout } from './dom-utils';
+
+async function bootstrapESDK({targetId}) {
   // Add script loader to page
-
-  alert('Injected some JS.');
-
   const {default: appFactory } = await System.import('@ecom/checkout/mock')
-  appFactory(
-    `#${checkoutElement.id}`,
+  const app = appFactory(
+    `#${targetId}`,
     {
       workflow: 'shipping',
       cartToken: 'abc123',
     });
+
+  return app;
 }
 
 function bootstrapGoToPaymentButton() {
@@ -20,15 +21,6 @@ function bootstrapGoToPaymentButton() {
       alert('clicked')
     })
   }
-
-function attachCheckoutModal() {
-  const modalElement = document.createElement('div');
-  modalElement.id = 'checkout-modal'
-
-  document.querySelector('body').appendChild(modalElement);
-
-  return modalElement;
-}
 
 function showElement(element) {
   const { class: classNames } = element
@@ -45,9 +37,8 @@ function bootstrapItemSelection() {
 }
 
 function main() {
-  const checkoutModalElement = attachCheckoutModal();
 
-  bootstrapESDK({checkoutElement: checkoutModalElement});
+  bootstrapESDK({targetId: CHECKOUT_APP_TARGET});
 
 }
 

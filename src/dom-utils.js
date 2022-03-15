@@ -1,36 +1,24 @@
 const CLASS_DELIMITER = ' ';
-const HIDDEN_CLASS = 'hidden';
+const SLIDE_IN_CLASS = 'show-slider';
+const OVERLAY_CLASS = 'overlay';
+const SLIDE_CONTAINER_SELECTOR = '#slider-container'
+export const CHECKOUT_APP_TARGET = 'checkout-app-target';
+export const CHECKOUT_MODAL_CONTAINER = 'checkout-modal-container';
 
-export function attachModal(id) {
+export function displayCheckout (hide = false) {
+  const sliderContainer = document.querySelector(SLIDE_CONTAINER_SELECTOR);
+  const checkoutModalContainer = document.querySelector(CHECKOUT_MODAL_CONTAINER);
+
+  modifyClassName
 
 }
 
-export function showElement(element) {
-  const { class: classNames } = element;
-  const modifiedClass = classNames.split(CLASS_DELIMITER)
-    .filter(className => className !== HIDDEN_CLASS)
-    .join(CLASS_DELIMITER);
+function modifyClassName ({element, className, hide}) {
+  let classNames = element.className.split(CLASS_DELIMITER);
 
-  element.class = modifiedClass;
+  classNames = classNames.filter( name => hide ? name !== SLIDE_IN_CLASS : name );
+
+  element.className = classNames.join(CLASS_DELIMITER);
 
   return element;
-}
-
-export function hideElement(element) {
-  return displayElement(element, true);
-}
-
-function displayElement(element, bHide) {
-  const { class: classNames } = element;
-
-  let processedClassNames = classNames.split(CLASS_DELIMITER)
-    .filter(className => className !== HIDDEN_CLASS)
-
-  if (bHide) {
-    processedClassNames.push([HIDDEN_CLASS]);
-  }
-
-  element.class = processedClassNames.join(CLASS_DELIMITER);
-
-  return element;
-}
+};
