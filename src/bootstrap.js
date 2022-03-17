@@ -1,9 +1,9 @@
 import {
-  CHECKOUT_MODAL_CONTAINER,
   CHECKOUT_APP_TARGET_SELECTOR,
   DISMISS_CHECKOUT_BUTTON_SELECTOR,
   displayCheckout,
 } from './dom-utils';
+import { bootstrapHostInteractions } from './host-state-utils';
 
 async function bootstrapESDK({targetSelector}) {
   // Add script loader to page
@@ -18,22 +18,6 @@ async function bootstrapESDK({targetSelector}) {
   return app;
 }
 
-function bootstrapGoToPaymentButton() {
-  debugger;
-  const goToCheckoutButton = document.querySelector('.continue-to-payment-btn')
-  debugger;
-  goToCheckoutButton.addEventListener('click', (event) => {
-    // TODO update route to #overview OR somehow remove base event listener
-    event.preventDefault();
-    displayCheckout(true);
-  })
-}
-
-
-function bootstrapItemSelection() {
-
-}
-
 function bootstrapExitModal() {
   const dimissCheckoutButton = document.querySelector(DISMISS_CHECKOUT_BUTTON_SELECTOR);
 
@@ -43,11 +27,18 @@ function bootstrapExitModal() {
 }
 
 async function main() {
+  bootstrapHostInteractions();
   await bootstrapESDK({targetSelector: CHECKOUT_APP_TARGET_SELECTOR});
 
   bootstrapExitModal();
 
-  bootstrapGoToPaymentButton();
+  // Handle route changes
+  window.addEventListener('hashchange', () => {
+    if(location.hash === '#overview'){
+      bootstrapHostInteractions();
+    }
+  });
+
 }
 
 main();

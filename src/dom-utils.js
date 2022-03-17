@@ -1,3 +1,4 @@
+// INTEGRATION HELPERS
 const CLASS_DELIMITER = ' ';
 
 const SLIDE_IN_CLASS = 'esdk-show-slider';
@@ -8,7 +9,6 @@ const SLIDE_CONTAINER_SELECTOR = '#slider-container'
 export const CHECKOUT_APP_TARGET_SELECTOR = '#checkout-app-target';
 export const CHECKOUT_MODAL_CONTAINER = '#checkout-modal-container';
 export const DISMISS_CHECKOUT_BUTTON_SELECTOR = '#dismiss-checkout-btn';
-export const TESLA_ROOT_SELECTOR = '#root';
 
 export function displayCheckout (display = true) {
   const sliderContainer = document.querySelector(SLIDE_CONTAINER_SELECTOR);
@@ -43,3 +43,19 @@ function modifyClassName ({element, className, remove}) {
   debugger;
   return element;
 };
+
+// HOST SITE HELPERS
+
+export const TESLA_ROOT_SELECTOR = '#root';
+
+export function getFrontViewImageSrc () {
+  const parentElement = document.getElementById('Model_3_Front_View');
+  const image = parentElement.lastElementChild();
+  return image.getAttribute('xlink:href');
+}
+
+export function getSideViewImageSrc () {
+  const parentElement = document.getElementById('Model_3_Side_View');
+  const image = parentElement.lastElementChild();
+  return image.getAttribute('xlink:href');
+}
