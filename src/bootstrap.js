@@ -5,17 +5,17 @@ import {
 } from './dom-utils';
 import { bootstrapHostInteractions } from './host-state-utils';
 
+
+const APPLICATION_ID = 'sq0id-my-app-id';
+
 async function bootstrapESDK({targetSelector}) {
   // Add script loader to page
-  const {default: appFactory } = await System.import('@ecom/checkout/mock')
-  const app = appFactory(
-    targetSelector,
-    {
-      workflow: 'shipping',
-      cartToken: 'abc123',
-    });
+  const {default: appFactory, SDK } = await System.import('@ecom/checkout/mock')
 
-  return app;
+
+  return {
+    SDK
+  };
 }
 
 function bootstrapExitModal() {
@@ -27,15 +27,22 @@ function bootstrapExitModal() {
 }
 
 async function main() {
-  bootstrapHostInteractions();
-  await bootstrapESDK({targetSelector: CHECKOUT_APP_TARGET_SELECTOR});
+  window.setTimeout(bootstrapHostInteractions, 1000);
+  const { app, SDK } = await bootstrapESDK({targetSelector: CHECKOUT_APP_TARGET_SELECTOR});
 
-  bootstrapExitModal();
+  const ecom = SDK.Ecommerce(APPLICATION_ID);
+  const orderSession = await ecom.orderSession();
+  await orderSession.updateItems({})
+  const checkoutInstance = await orderSession.checkout();
+  checkoutInstance.attach(CHECKOUT_APP_TARGET_SELECTOR);
+
+
+  // bootstrapExitModal();
 
   // Handle route changes
   window.addEventListener('hashchange', () => {
     if(location.hash === '#overview'){
-      bootstrapHostInteractions();
+      window.setTimeout(bootstrapHostInteractions, 1000);
     }
   });
 

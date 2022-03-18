@@ -1,4 +1,4 @@
-import {displayCheckout} from './dom-utils'
+import { displayCheckout, DISMISS_CHECKOUT_BUTTON_SELECTOR} from './dom-utils'
 
 /**
  *
@@ -49,6 +49,12 @@ function bootstrapGoToPaymentButtonClickHandler (onClick) {
   button.addEventListener('click', onClick);
 }
 
+function bootstrapExitModalHandler(onClick) {
+  const dimissCheckoutButton = document.querySelector(DISMISS_CHECKOUT_BUTTON_SELECTOR);
+
+  dimissCheckoutButton.addEventListener('click', onClick);
+}
+
 function goToCheckoutHandler(event) {
   event.preventDefault();
 
@@ -59,6 +65,12 @@ function batteryAndDriveChangeHandler (event) {
   updateCartState({
     BATTERY_AND_DRIVE: event.target.value,
   })
+}
+
+function exitCheckoutHandler(event) {
+  event.preventDefault();
+  location.hash = 'overview';
+  displayCheckout(false);
 }
 
 const updateCartState = (partialCartState) => {
@@ -83,4 +95,5 @@ export const CartState = {
 export function bootstrapHostInteractions () {
   bootstrapGoToPaymentButtonClickHandler(goToCheckoutHandler);
   bootstrapBatteryAndDriveChangeHandler(batteryAndDriveChangeHandler);
+  bootstrapExitModalHandler(exitCheckoutHandler);
 }
